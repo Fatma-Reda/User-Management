@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
+import { bindActionCreators } from 'redux';
+import { addUser, updateUser } from '../../store/actions/UserActions';
+import ShortId from 'shortid';
+import {NavLink} from 'react-router-dom';
 
-// const intialState = {
-//     name: '',
-//     email: '',
-//     phone: '',
-//     Status: 'active',
-//     role: 'user'
-//   };
 const userSchema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup
+    .string()
+    .required()
+    .trim(),
   email: yup
     .string()
     .email()
-    .required(),
+    .required()
+    .trim(),
   phone: yup
     .number()
     .required()
-    .max(11)
-    .min(7),
+    .positive(),
   Status: yup.string().required(),
   role: yup.string().required()
 });
@@ -38,30 +39,22 @@ function UserForm(props) {
       onSubmit={(values, actions) => {
         console.log(actions);
         actions.setSubmitting(true);
-        setUser(values);
-        setTimeout(() => {
-          actions.resetForm({
-            name: '',
-            email: '',
-            phone: '',
-            Status: 'active',
-            role: 'user'
-          });
-          actions.setSubmitting(false);
-        }, 2000);
+        const id = ShortId.generate();
+        setUser({ id, ...values });
+        props.addUser({ id, ...values });
       }}
       validationSchema={userSchema}
     >
       {props =>
         !props.isSubmitting ? (
-          <form onSubmit={props.handleSubmit} className="mmm">
+          <form onSubmit={props.handleSubmit} className="User-container m-auto">
             <Field
               name="name"
               onChange={props.handleChange}
               value={props.values.name}
               type="text"
               placeholder="Enter Name"
-              className="userform-input"
+              className="form-control mt-5 "
             />
             {props.errors.name && props.touched.name ? (
               <span className="field_text">{props.errors.name}</span>
@@ -74,7 +67,7 @@ function UserForm(props) {
               onChange={props.handleChange}
               name="email"
               value={props.values.email}
-              className="userform-input"
+              className="form-control mt-3"
             />
 
             {props.errors.email && props.touched.email ? (
@@ -84,12 +77,12 @@ function UserForm(props) {
             )}
 
             <Field
-              type="number"
+              type="tel"
               onChange={props.handleChange}
               name="phone"
               value={props.values.phone}
               placeholder="Enter Phone"
-              className="userform-input"
+              className="form-control mt-3"
             />
 
             {props.errors.phone && props.touched.phone ? (
@@ -97,12 +90,20 @@ function UserForm(props) {
             ) : (
               ''
             )}
-            <Field component="select" name="Status">
+            <Field
+              component="select"
+              name="Status"
+              className="form-control mt-3"
+            >
               <option value="active">active</option>
               <option value="soft_deleted">soft_deleted</option>
             </Field>
 
-            <Field component="select" name="role">
+            <Field
+              component="select"
+              name="role"
+              className="form-control mt-3 mb-3"
+            >
               <option value="user">user</option>
               <option value="admin">admin</option>
             </Field>
@@ -110,7 +111,7 @@ function UserForm(props) {
             <button
               type="submit"
               disabled={!props.dirty && !props.isSubmitting}
-              className="button"
+              className="btn btn-primary"
             >
               Submit
             </button>
@@ -118,17 +119,30 @@ function UserForm(props) {
               disabled={!props.dirty}
               onClick={props.handleReset}
               type="button"
-              className="button"
+              className="btn btn-dark ml-3"
             >
               Reset
             </button>
           </form>
         ) : (
-          <div className="overlay" />
+          <NavLink to="/" exact className=" User-container m-auto">
+          You add new user successfully
+          </NavLink>
         )
       }
     </Formik>
   );
 }
-
-export default UserForm;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      addUser,
+      updateUser
+    },
+    dispatch
+  );
+}
+export default connect(
+  null,
+  mapDispatchToProps
+)(UserForm);

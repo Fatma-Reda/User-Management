@@ -1,4 +1,6 @@
 import * as actionTypes from '../actions/UserActions';
+import userModel from '../../models/User';
+import token from '../../db/localStorage';
 
 const data = [
   {
@@ -29,15 +31,37 @@ const data = [
 
 const initialState = {
   userList: data,
-  filteredList: []
+  filteredList: data
+  // user: userModel,
+  // isRegistered: false,
+  // isLogedIn: false,
+  // token: null
 };
 
 export default function userReducer(state = initialState, action) {
   let newuserList = [...state.userList];
-  let newFilteredList = [...newuserList];
+ // let newFilteredList = [...state.filteredList];
+  // let currentUser = { ...state.user };
+  // let currentToken = state.token;
+  // let registered = state.isRegistered;
+  // let logedIn = state.isLogedIn;
 
   switch (action.type) {
     case actionTypes.GET_ALL_USERS:
+      newuserList = [...data];
+      break;
+    case actionTypes.ADD_USER:
+      {
+        let newuser = { ...action.payload };
+        newuserList.push(newuser);
+      }
+      break;
+    case actionTypes.UPDATE_USER:
+      {
+        let updatedItem = { ...action.payload };
+        let index = newuserList.findIndex(el => el.id === updatedItem.id);
+        if (index !== -1) newuserList[index] = updatedItem;
+      }
       break;
     // case actionTypes.GET_USERS_BY_NAME:
     //   {
@@ -51,7 +75,7 @@ export default function userReducer(state = initialState, action) {
     case actionTypes.DELETE_USER:
       {
         let id = action.payload;
-        let index = newFilteredList.findIndex(el => el.id === id);
+        let index = newuserList.findIndex(el => el.id === id);
         if (index !== -1) {
           newuserList = [].concat(
             newuserList.slice(0, index),
@@ -67,6 +91,6 @@ export default function userReducer(state = initialState, action) {
   return {
     ...state,
     userList: newuserList,
-    filteredList: newFilteredList
+   // filteredList: newFilteredList
   };
 }

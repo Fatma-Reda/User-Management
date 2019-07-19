@@ -6,12 +6,6 @@ import { bindActionCreators } from 'redux';
 import { getAllUsers, deleteUser } from '../../store/actions/UserActions';
 
 class UserCardListing extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state={
-
-  //   }
-  // }
   componentDidMount() {
     this.props.getAllUsers();
   }
@@ -45,7 +39,7 @@ class UserCardListing extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    userList: state.users.filteredList
+    userList: state.users.userList
   };
 };
 
