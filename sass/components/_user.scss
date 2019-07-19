@@ -1,0 +1,13 @@
+.User-container {
+  width: 60%;
+  .User-item {
+    &__body {
+      &-head {
+        color: #224e6a;
+      }
+      &-info {
+        color: #737373;
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.User-container {
+  width: 60%; }
+  .User-container .User-item__body-head {
+    color: #224e6a; }
+  .User-container .User-item__body-info {
+    color: #737373;
+    margin-left: 5px; }
