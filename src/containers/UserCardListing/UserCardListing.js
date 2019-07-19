@@ -4,8 +4,16 @@ import UserCard from '../../components/UserCard/';
 import Error from './Error';
 import { bindActionCreators } from 'redux';
 import { getAllUsers, deleteUser } from '../../store/actions/UserActions';
+import Pagination from '../../components/Pagination/';
 
 class UserCardListing extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: 1,
+      usersPerPage: 3
+    };
+  }
   componentDidMount() {
     this.props.getAllUsers();
   }
@@ -14,7 +22,16 @@ class UserCardListing extends React.Component {
       return <Error />;
     }
 
-    const list = this.props.userList.map(u => {
+    const indexOfLastUser = this.state.currentPage * this.state.usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - this.state.usersPerPage;
+    const currentUsers = this.props.userList.slice(
+      indexOfFirstUser,
+      indexOfLastUser
+    );
+
+    const paginate = pageNumber => this.setState({ currentPage: pageNumber });
+
+    const list = currentUsers.map(u => {
       return (
         <tr className="User-item" key={u.id}>
           <UserCard data={u} delete={() => this.props.deleteUser(u.id)} />
@@ -23,17 +40,24 @@ class UserCardListing extends React.Component {
     });
 
     return (
-      <table className="table User-container m-auto">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Controls</th>
-          </tr>
-        </thead>
-        <tbody className="User-item__body">{list}</tbody>
-      </table>
+      <>
+        <table className="table User-container m-auto">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Email</th>
+              <th scope="col">Controls</th>
+            </tr>
+          </thead>
+          <tbody className="User-item__body">{list}</tbody>
+        </table>
+        <Pagination 
+          usersPerPage={this.state.usersPerPage}
+          totalusers={this.props.userList.length}
+          paginate={paginate}
+        />
+      </>
     );
   }
 }

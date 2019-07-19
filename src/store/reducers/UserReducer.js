@@ -26,6 +26,14 @@ const data = [
     phone: 82736,
     Status: 'soft_deleted',
     role: 'user'
+  },
+  {
+    id: 4,
+    name: 'fatma',
+    email: 'c@test.com',
+    phone: 82736,
+    Status: 'soft_deleted',
+    role: 'user'
   }
 ];
 
@@ -48,7 +56,7 @@ export default function userReducer(state = initialState, action) {
 
   switch (action.type) {
     case actionTypes.GET_ALL_USERS:
-      newuserList = [...data];
+      newuserList = [...state.userList];
       break;
     case actionTypes.ADD_USER:
       {
