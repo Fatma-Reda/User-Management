@@ -10,10 +10,19 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
+import { addLocaleData } from "react-intl";
+import en from "react-intl/locale-data/en";
+import ar from "react-intl/locale-data/ar";
+import { localeSet } from "./store/actions/locale";
 
-// this line should be always commented unless you are working with developer tools
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+addLocaleData(en);
+addLocaleData(ar);
+
 const myStore = createStore(reducers, applyMiddleware(thunk));
+
+if (localStorage.alhubLang) {
+  myStore.dispatch(localeSet(localStorage.alhubLang));
+}
 
 ReactDOM.render(
   <Provider store={myStore}>

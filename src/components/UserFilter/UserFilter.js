@@ -6,12 +6,10 @@ import { setFilter, setSort } from '../../store/actions/UserActions';
 const UserFilter = props => {
   const handleChangeSort = () => {
     const value = !props.sortstatus;
-    console.log(value);
     props.setSort(value);
   };
   const handleChangeFilter = e => {
     const value = e.target.value;
-    console.log(value);
     props.setFilter(value);
   };
   return (

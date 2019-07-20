@@ -1,6 +1,5 @@
 import * as actionTypes from '../actions/UserActions';
-import userModel from '../../models/User';
-import token from '../../db/localStorage';
+import { Role } from '../../db/role';
 
 const data = [
   {
@@ -37,27 +36,39 @@ const data = [
   }
 ];
 
+const logUsers = [
+  {
+    id: 1,
+    username: 'admin',
+    password: 'admin',
+    role: Role.Admin
+  },
+  {
+    id: 2,
+    username: 'user',
+    password: 'user',
+    role: Role.User
+  }
+];
 const initialState = {
   userList: data,
   filteredList: data,
   sortstatus: 0,
-  filterstatus: 0
-  // user: userModel,
-  // isRegistered: false,
-  // isLogedIn: false,
-  // token: null
+  filterstatus: 0,
+  logUsers: logUsers,
+  user: {
+    id: 2,
+    username: 'user',
+    password: 'user',
+    role: Role.User
+  }
 };
 
 export default function userReducer(state = initialState, action) {
   let newuserList = [...state.userList];
   let nsortstatus = state.sortstatus;
   let nfilterstatus = state.filterstatus;
-  // let newFilteredList = [...state.filteredList];
-  // let currentUser = { ...state.user };
-  // let currentToken = state.token;
-  // let registered = state.isRegistered;
-  // let logedIn = state.isLogedIn;
-
+  let currentUser = { ...state.user };
   switch (action.type) {
     case actionTypes.GET_ALL_USERS:
       newuserList = [...state.userList];
@@ -75,15 +86,6 @@ export default function userReducer(state = initialState, action) {
         if (index !== -1) newuserList[index] = updatedItem;
       }
       break;
-    // case actionTypes.GET_USERS_BY_NAME:
-    //   {
-    //     const name = action.payload.toLowerCase().replace(/[^a-z0-9]/gi, '');
-
-    //     newFilteredList = newuserList.filter(
-    //       c => c.name.toLowerCase().search(name) !== -1
-    //     );
-    //   }
-    //   break;
     case actionTypes.DELETE_USER:
       {
         let id = action.payload;
@@ -99,15 +101,15 @@ export default function userReducer(state = initialState, action) {
     case actionTypes.SET_SORT_STATUS:
       {
         let value = action.payload;
-        nsortstatus= value;
+        nsortstatus = value;
       }
       break;
-      case actionTypes.SET_FILTER_STATUS:
-          {
-            let value = action.payload;
-            nfilterstatus= value;
-          }
-          break;
+    case actionTypes.SET_FILTER_STATUS:
+      {
+        let value = action.payload;
+        nfilterstatus = value;
+      }
+      break;
     default:
       // console.error(action.payload);
       break;
@@ -116,7 +118,7 @@ export default function userReducer(state = initialState, action) {
     ...state,
     userList: newuserList,
     sortstatus: nsortstatus,
-    filterstatus: nfilterstatus
-    // filteredList: newFilteredList
+    filterstatus: nfilterstatus,
+    user: currentUser
   };
 }

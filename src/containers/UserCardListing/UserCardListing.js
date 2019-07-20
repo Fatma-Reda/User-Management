@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { getAllUsers, deleteUser } from '../../store/actions/UserActions';
 import Pagination from '../../components/Pagination/';
 import Filter from '../../components/UserFilter/';
+import { FormattedMessage } from 'react-intl';
 
 class UserCardListing extends React.Component {
   constructor(props) {
@@ -38,11 +39,17 @@ class UserCardListing extends React.Component {
 
     const indexOfLastUser = this.state.currentPage * this.state.usersPerPage;
     const indexOfFirstUser = indexOfLastUser - this.state.usersPerPage;
-    const currentUsers = results.slice(indexOfFirstUser, indexOfLastUser);
+    let currentUsers = results.slice(indexOfFirstUser, indexOfLastUser);
 
     const paginate = pageNumber => this.setState({ currentPage: pageNumber });
 
+
     const list = currentUsers.map(u => {
+      if (this.props.lang === 'ar') {
+        return <>
+          
+        </>;
+      }
       return (
         <tr className="User-item" key={u.id}>
           <UserCard data={u} delete={() => this.props.deleteUser(u.id)} />
@@ -56,10 +63,22 @@ class UserCardListing extends React.Component {
         <table className="table User-container m-auto">
           <thead>
             <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Email</th>
-              <th scope="col">Controls</th>
+              <th scope="col">
+                {' '}
+                <FormattedMessage id="user.name" defaultMessage="Name" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="user.phone" defaultMessage="Phone" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="user.email" defaultMessage="Email" />
+              </th>
+              <th scope="col">
+                <FormattedMessage
+                  id="user.controls"
+                  defaultMessage="Controls"
+                />
+              </th>
             </tr>
           </thead>
           <tbody className="User-item__body">{list}</tbody>
@@ -77,7 +96,7 @@ const mapStateToProps = state => {
   return {
     userList: state.users.userList,
     sortstatus: state.users.sortstatus,
-    filterstatus: state.users.filterstatus
+    filterstatus: state.users.filterstatus,
   };
 };
 
