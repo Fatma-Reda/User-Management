@@ -5,6 +5,7 @@ import Error from './Error';
 import { bindActionCreators } from 'redux';
 import { getAllUsers, deleteUser } from '../../store/actions/UserActions';
 import Pagination from '../../components/Pagination/';
+import Filter from '../../components/UserFilter/';
 
 class UserCardListing extends React.Component {
   constructor(props) {
@@ -21,13 +22,23 @@ class UserCardListing extends React.Component {
     if (!this.props.userList || !this.props.userList.length) {
       return <Error />;
     }
+    let results = [];
+
+    if (this.props.sortstatus) {
+      this.props.userList.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    this.props.userList.map(user => {
+      if (this.props.filterstatus === 0 || this.props.filterstatus === 'all') {
+        results.push(user);
+      } else if (user.Status === this.props.filterstatus) {
+        results.push(user);
+      }
+    });
 
     const indexOfLastUser = this.state.currentPage * this.state.usersPerPage;
     const indexOfFirstUser = indexOfLastUser - this.state.usersPerPage;
-    const currentUsers = this.props.userList.slice(
-      indexOfFirstUser,
-      indexOfLastUser
-    );
+    const currentUsers = results.slice(indexOfFirstUser, indexOfLastUser);
 
     const paginate = pageNumber => this.setState({ currentPage: pageNumber });
 
@@ -41,6 +52,7 @@ class UserCardListing extends React.Component {
 
     return (
       <>
+        <Filter></Filter>
         <table className="table User-container m-auto">
           <thead>
             <tr>
@@ -52,9 +64,9 @@ class UserCardListing extends React.Component {
           </thead>
           <tbody className="User-item__body">{list}</tbody>
         </table>
-        <Pagination 
+        <Pagination
           usersPerPage={this.state.usersPerPage}
-          totalusers={this.props.userList.length}
+          totalusers={results.length}
           paginate={paginate}
         />
       </>
@@ -63,7 +75,9 @@ class UserCardListing extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    userList: state.users.userList
+    userList: state.users.userList,
+    sortstatus: state.users.sortstatus,
+    filterstatus: state.users.filterstatus
   };
 };
 

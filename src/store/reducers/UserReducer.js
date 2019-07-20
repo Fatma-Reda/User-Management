@@ -39,7 +39,9 @@ const data = [
 
 const initialState = {
   userList: data,
-  filteredList: data
+  filteredList: data,
+  sortstatus: 0,
+  filterstatus: 0
   // user: userModel,
   // isRegistered: false,
   // isLogedIn: false,
@@ -48,7 +50,9 @@ const initialState = {
 
 export default function userReducer(state = initialState, action) {
   let newuserList = [...state.userList];
- // let newFilteredList = [...state.filteredList];
+  let nsortstatus = state.sortstatus;
+  let nfilterstatus = state.filterstatus;
+  // let newFilteredList = [...state.filteredList];
   // let currentUser = { ...state.user };
   // let currentToken = state.token;
   // let registered = state.isRegistered;
@@ -92,6 +96,18 @@ export default function userReducer(state = initialState, action) {
         }
       }
       break;
+    case actionTypes.SET_SORT_STATUS:
+      {
+        let value = action.payload;
+        nsortstatus= value;
+      }
+      break;
+      case actionTypes.SET_FILTER_STATUS:
+          {
+            let value = action.payload;
+            nfilterstatus= value;
+          }
+          break;
     default:
       // console.error(action.payload);
       break;
@@ -99,6 +115,8 @@ export default function userReducer(state = initialState, action) {
   return {
     ...state,
     userList: newuserList,
-   // filteredList: newFilteredList
+    sortstatus: nsortstatus,
+    filterstatus: nfilterstatus
+    // filteredList: newFilteredList
   };
 }

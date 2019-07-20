@@ -6,10 +6,10 @@ import UserForm from '../containers/UserForm/';
 import UserDetails from '../components/UserDetails/';
 const App = () => {
   return (
-    <div className="container">
+    <div className="container-fluid">
       <NavBar />
       <Switch>
-        <Route path="/" exact component={UserListening } />
+        <Route path="/" exact component={UserListening} />
         <Route path="/user/" exact component={UserForm } />
         <Route path="/user/:id" exact component={UserForm } />
         <Route path="/users/:id" exact component={UserDetails} />
