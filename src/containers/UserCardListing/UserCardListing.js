@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import UserCard from '../../components/UserCard/';
 import Error from './Error';
 import { bindActionCreators } from 'redux';
-import { getAllUsers, deleteUser } from '../../store/actions/UserActions';
+import { getAllUsers, deleteUser, getUser } from '../../store/actions/UserActions';
 import Pagination from '../../components/Pagination/';
 import Filter from '../../components/UserFilter/';
 import { FormattedMessage } from 'react-intl';
@@ -45,21 +45,16 @@ class UserCardListing extends React.Component {
 
 
     const list = currentUsers.map(u => {
-      if (this.props.lang === 'ar') {
-        return <>
-          
-        </>;
-      }
       return (
         <tr className="User-item" key={u.id}>
-          <UserCard data={u} delete={() => this.props.deleteUser(u.id)} />
+          <UserCard data={u} delete={() => this.props.deleteUser(u.id)} getuser={() => this.props.getUser(u.id)}/>
         </tr>
       );
     });
 
     return (
       <>
-        <Filter></Filter>
+        <Filter/>
         <table className="table User-container m-auto">
           <thead>
             <tr>
@@ -104,7 +99,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       getAllUsers,
-      deleteUser
+      deleteUser,
+      getUser
     },
     dispatch
   );

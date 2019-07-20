@@ -1,7 +1,7 @@
 import React from 'react';
 import Proptype from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 const UserCard = props => {
@@ -41,7 +41,13 @@ const UserCard = props => {
         <div className="btn-group" role="group" aria-label="Basic example">
           <button type="button" className="btn btn-secondary">
             <NavLink to="/users/:id">
-              <i className="fa fa-eye"></i>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => props.getuser()}
+              >
+                <i className="fa fa-eye"></i>
+              </button>
             </NavLink>
           </button>
           {controls}

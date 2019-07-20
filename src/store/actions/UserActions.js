@@ -4,6 +4,7 @@ export const ADD_USER = 'ADD_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 export const SET_SORT_STATUS='SET_SORT_STATUS';
 export const SET_FILTER_STATUS='SET_FILTER_STATUS';
+export const GET_USER_BY_ID='GET_USER_BY_ID';
 
 export const getAllUsers = () => {
   return {
@@ -14,6 +15,12 @@ export const getAllUsers = () => {
 export const deleteUser = id => {
   return {
     type: DELETE_USER,
+    payload: id
+  };
+};
+export const getUser = id => {
+  return {
+    type: GET_USER_BY_ID,
     payload: id
   };
 };

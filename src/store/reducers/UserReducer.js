@@ -56,12 +56,19 @@ const initialState = {
   sortstatus: 0,
   filterstatus: 0,
   logUsers: logUsers,
+  selectedUser: {},
   user: {
-    id: 2,
-    username: 'user',
-    password: 'user',
-    role: Role.User
+    id: 1,
+    username: 'admin',
+    password: 'admin',
+    role: Role.Admin
   }
+  // {
+  //   id: 2,
+  //   username: 'user',
+  //   password: 'user',
+  //   role: Role.User
+  // }
 };
 
 export default function userReducer(state = initialState, action) {
@@ -69,6 +76,7 @@ export default function userReducer(state = initialState, action) {
   let nsortstatus = state.sortstatus;
   let nfilterstatus = state.filterstatus;
   let currentUser = { ...state.user };
+  let nselectedUser = { ...state.selectedUser };
   switch (action.type) {
     case actionTypes.GET_ALL_USERS:
       newuserList = [...state.userList];
@@ -98,6 +106,21 @@ export default function userReducer(state = initialState, action) {
         }
       }
       break;
+    case actionTypes.UPDATE_USER:
+      {
+        const updatedItem = { ...action.payload };
+        const index = newuserList.findIndex(el => el.id === updatedItem.id);
+        if (index !== -1) newuserList[index] = updatedItem;
+      }
+
+      break;
+    case actionTypes.GET_USER_BY_ID:
+      {
+        const id = action.payload;
+        const index = newuserList.findIndex(el => el.id === id);
+        if (index !== -1) nselectedUser = { ...newuserList[index] };
+      }
+      break;
     case actionTypes.SET_SORT_STATUS:
       {
         let value = action.payload;
@@ -119,6 +142,7 @@ export default function userReducer(state = initialState, action) {
     userList: newuserList,
     sortstatus: nsortstatus,
     filterstatus: nfilterstatus,
-    user: currentUser
+    user: currentUser,
+    selectedUser: nselectedUser
   };
 }
